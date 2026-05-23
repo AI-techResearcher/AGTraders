@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  products Product[]
+
+  @@index([slug])
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  description String
+  images      String
+  featured    Boolean          @default(false)
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+  createdAt   DateTime         @default(now())
+
+  @@index([categoryId])
+  @@index([featured])
+  @@index([createdAt])
+  @@index([slug])
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku       String  @unique
+  size      String
+  color     String
+  price     Int
+  stock     Int     @default(0)
+
+  @@index([productId])
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  orderNumber      String      @unique
+  guestName        String
+  phone            String
+  email            String
+  address          String
+  city             String
+  province         String
+  postalCode       String?
+  subtotal         Int
+  shipping         Int
+  total            Int
+  status           String      @default("awaiting_payment")
+  preferredPayment String?
+  paymentNote      String?
+  createdAt        DateTime    @default(now())
+  items            OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
+  @@index([orderNumber])
+}
+
+model OrderItem {
+  id          String @id @default(cuid())
+  orderId     String
+  order       Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId   String
+  productName String
+  sku         String
+  size        String
+  color       String
+  price       Int
+  quantity    Int
+
+  @@index([orderId])
+}
+
+model PaymentSettings {
+  id              String   @id @default("default")
+  jazzcashNumber  String
+  easypaisaNumber String
+  bankName        String
+  accountTitle    String
+  accountNumber   String
+  iban            String
+  updatedAt       DateTime @updatedAt
+}
