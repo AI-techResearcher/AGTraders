@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ProductCard } from "@/components/ProductCard";
 import { ProductFilters } from "@/components/ProductFilters";
@@ -51,9 +52,9 @@ export default async function ProductsPage({
           {sorted.length === 0 ? (
             <div className="rounded-xl border border-zinc-200 bg-white p-8 text-center">
               <p className="text-zinc-600">No products match your filters.</p>
-              <a href="/products" className="mt-2 inline-block text-sm font-medium text-brand-gold hover:underline">
+              <Link href="/products" className="mt-2 inline-block text-sm font-medium text-brand-gold hover:underline">
                 Clear filters
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
