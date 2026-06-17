@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ProductCard } from "@/components/ProductCard";
 import { ServicesSlider } from "@/components/ServicesSlider";
+import { Ticker } from "@/components/Ticker";
 
 export const revalidate = 60;
 
@@ -96,6 +97,9 @@ export default async function HomePage() {
 
   return (
     <div>
+      {/* Import/export announcement ticker */}
+      <Ticker />
+
       {/* ---------------------------------------------------------------- *
        * HERO
        * ---------------------------------------------------------------- */}
