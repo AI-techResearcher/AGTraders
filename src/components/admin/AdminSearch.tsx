@@ -31,12 +31,9 @@ export function AdminSearch({
         name={paramName}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        className="min-w-0 flex-1 rounded-lg border border-zinc-300 px-3 py-2 text-sm sm:max-w-xs"
+        className="input min-w-0 flex-1 sm:max-w-xs"
       />
-      <button
-        type="submit"
-        className="shrink-0 rounded-lg bg-brand-navy px-3 py-2 text-sm font-medium text-white hover:bg-brand-navy-light"
-      >
+      <button type="submit" className="btn-secondary shrink-0">
         Search
       </button>
     </form>

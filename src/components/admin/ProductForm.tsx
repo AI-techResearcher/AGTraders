@@ -55,44 +55,44 @@ export function ProductForm({ categories, product }: ProductFormProps) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Name *</label>
+          <label className="block text-sm font-medium text-neutral-700">Name *</label>
           <input
             name="name"
             required
             defaultValue={product?.name}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+            className="input mt-1"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Slug</label>
+          <label className="block text-sm font-medium text-neutral-700">Slug</label>
           <input
             name="slug"
             defaultValue={product?.slug}
             placeholder="auto-from-name"
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+            className="input mt-1"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Description *</label>
+        <label className="block text-sm font-medium text-neutral-700">Description *</label>
         <textarea
           name="description"
           required
           rows={4}
           defaultValue={product?.description}
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="input mt-1"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Category *</label>
+          <label className="block text-sm font-medium text-neutral-700">Category *</label>
           <select
             name="categoryId"
             required
             defaultValue={product?.categoryId}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+            className="input mt-1"
           >
             <option value="">Select category</option>
             {categories.map((c) => (
@@ -103,12 +103,12 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           </select>
         </div>
         <div className="flex items-end">
-          <label className="flex items-center gap-2 text-sm font-medium text-zinc-700">
+          <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
             <input
               type="checkbox"
               name="featured"
               defaultChecked={product?.featured}
-              className="rounded border-zinc-300"
+              className="h-4 w-4 rounded border-border accent-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-1"
             />
             Featured on homepage
           </label>
@@ -116,7 +116,7 @@ export function ProductForm({ categories, product }: ProductFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-zinc-700">
+        <label className="block text-sm font-medium text-neutral-700">
           Image URLs (one per line)
         </label>
         <textarea
@@ -124,13 +124,13 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           rows={3}
           defaultValue={imagesText}
           placeholder="https://..."
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 font-mono text-sm"
+          className="input mt-1 font-mono text-sm"
         />
       </div>
 
       <div>
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-zinc-900">Variants (SKUs) *</h3>
+          <h3 className="font-semibold text-neutral-900">Variants (SKUs) *</h3>
           <button
             type="button"
             onClick={addVariant}
@@ -139,36 +139,43 @@ export function ProductForm({ categories, product }: ProductFormProps) {
             + Add variant
           </button>
         </div>
-        <div className="mt-3 space-y-3">
+        <div className="mt-3 hidden gap-2 px-3 text-xs font-medium uppercase tracking-wide text-muted sm:grid sm:grid-cols-6">
+          <span className="sm:col-span-2">SKU</span>
+          <span>Size</span>
+          <span>Color</span>
+          <span>Price</span>
+          <span>Stock</span>
+        </div>
+        <div className="mt-2 space-y-3">
           {variants.map((v, i) => (
             <div
               key={i}
-              className="grid gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 sm:grid-cols-6"
+              className="grid gap-2 rounded-lg border border-border bg-neutral-50 p-3 sm:grid-cols-6"
             >
               <input
                 placeholder="SKU"
                 value={v.sku}
                 onChange={(e) => updateVariant(i, "sku", e.target.value)}
-                className="rounded border border-zinc-300 px-2 py-1 text-sm sm:col-span-2"
+                className="input-sm sm:col-span-2"
               />
               <input
                 placeholder="Size"
                 value={v.size}
                 onChange={(e) => updateVariant(i, "size", e.target.value)}
-                className="rounded border border-zinc-300 px-2 py-1 text-sm"
+                className="input-sm"
               />
               <input
                 placeholder="Color"
                 value={v.color}
                 onChange={(e) => updateVariant(i, "color", e.target.value)}
-                className="rounded border border-zinc-300 px-2 py-1 text-sm"
+                className="input-sm"
               />
               <input
                 type="number"
                 placeholder="Price PKR"
                 value={v.price || ""}
                 onChange={(e) => updateVariant(i, "price", Number(e.target.value))}
-                className="rounded border border-zinc-300 px-2 py-1 text-sm"
+                className="input-sm"
               />
               <div className="flex gap-1 sm:col-span-2">
                 <input
@@ -176,15 +183,23 @@ export function ProductForm({ categories, product }: ProductFormProps) {
                   placeholder="Stock"
                   value={v.stock || ""}
                   onChange={(e) => updateVariant(i, "stock", Number(e.target.value))}
-                  className="flex-1 rounded border border-zinc-300 px-2 py-1 text-sm"
+                  className="input-sm flex-1"
                 />
                 {variants.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeVariant(i)}
-                    className="rounded border border-red-200 px-2 text-sm text-red-600 hover:bg-red-50"
+                    aria-label="Remove variant"
+                    className="btn-danger px-2"
                   >
-                    ×
+                    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+                      <path
+                        d="M6 6l8 8M14 6l-8 8"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                    </svg>
                   </button>
                 )}
               </div>
@@ -193,12 +208,9 @@ export function ProductForm({ categories, product }: ProductFormProps) {
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
 
-      <button
-        type="submit"
-        className="rounded-xl bg-brand-gold px-6 py-2.5 font-semibold text-brand-navy hover:bg-brand-gold-light"
-      >
+      <button type="submit" className="btn-primary">
         {product ? "Update product" : "Create product"}
       </button>
     </form>

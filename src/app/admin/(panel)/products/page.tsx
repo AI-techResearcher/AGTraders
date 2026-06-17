@@ -3,6 +3,17 @@ import { prisma } from "@/lib/prisma";
 import { formatPKR } from "@/lib/format";
 import { deleteProduct } from "@/app/admin/actions";
 import { AdminSearch } from "@/components/admin/AdminSearch";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { ConfirmButton } from "@/components/admin/ConfirmButton";
+import {
+  AdminTable,
+  AdminThead,
+  AdminTh,
+  AdminTbody,
+  AdminTr,
+  AdminTd,
+  AdminTableEmpty,
+} from "@/components/admin/AdminTable";
 
 type Props = { searchParams: Promise<{ q?: string }> };
 
@@ -28,47 +39,46 @@ export default async function AdminProductsPage({ searchParams }: Props) {
 
   return (
     <div>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">Products</h1>
-        <Link
-          href="/admin/products/new"
-          className="inline-flex justify-center rounded-lg bg-brand-gold px-4 py-2 text-sm font-semibold text-brand-navy hover:bg-brand-gold-light"
-        >
-          Add product
-        </Link>
-      </div>
+      <AdminPageHeader
+        title="Products"
+        action={
+          <Link href="/admin/products/new" className="btn-primary">
+            Add product
+          </Link>
+        }
+      />
 
-      <div className="mt-4">
+      <div className="mb-6">
         <AdminSearch placeholder="Search name, slug, or SKU…" defaultValue={q ?? ""} />
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
-        <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="border-b border-zinc-100 bg-zinc-50 text-zinc-600">
-            <tr>
-              <th className="px-4 py-3 font-medium">Name</th>
-              <th className="px-4 py-3 font-medium">Category</th>
-              <th className="px-4 py-3 font-medium">Variants</th>
-              <th className="px-4 py-3 font-medium">From</th>
-              <th className="px-4 py-3 font-medium">Featured</th>
-              <th className="px-4 py-3 font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => {
+      <AdminTable minWidth="min-w-[640px]">
+        <AdminThead>
+          <AdminTh>Name</AdminTh>
+          <AdminTh>Category</AdminTh>
+          <AdminTh align="right">Variants</AdminTh>
+          <AdminTh align="right">From</AdminTh>
+          <AdminTh>Featured</AdminTh>
+          <AdminTh>Actions</AdminTh>
+        </AdminThead>
+        <AdminTbody>
+          {products.length === 0 ? (
+            <AdminTableEmpty colSpan={6}>No products found.</AdminTableEmpty>
+          ) : (
+            products.map((p) => {
               const minPrice = Math.min(...p.variants.map((v) => v.price));
               const totalStock = p.variants.reduce((s, v) => s + v.stock, 0);
               return (
-                <tr key={p.id} className="border-b border-zinc-50">
-                  <td className="px-4 py-3 font-medium">{p.name}</td>
-                  <td className="px-4 py-3">{p.category.name}</td>
-                  <td className="px-4 py-3">
+                <AdminTr key={p.id}>
+                  <AdminTd className="font-medium text-neutral-900">{p.name}</AdminTd>
+                  <AdminTd>{p.category.name}</AdminTd>
+                  <AdminTd numeric>
                     {p.variants.length} SKUs · {totalStock} stock
-                  </td>
-                  <td className="px-4 py-3">{formatPKR(minPrice)}</td>
-                  <td className="px-4 py-3">{p.featured ? "Yes" : "—"}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex gap-3">
+                  </AdminTd>
+                  <AdminTd numeric>{formatPKR(minPrice)}</AdminTd>
+                  <AdminTd>{p.featured ? "Yes" : "—"}</AdminTd>
+                  <AdminTd>
+                    <div className="flex items-center gap-3">
                       <Link
                         href={`/admin/products/${p.id}`}
                         className="text-brand-gold hover:underline"
@@ -77,21 +87,18 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                       </Link>
                       <form action={deleteProduct}>
                         <input type="hidden" name="id" value={p.id} />
-                        <button type="submit" className="text-red-600 hover:underline">
+                        <ConfirmButton message="Delete this product? This cannot be undone.">
                           Delete
-                        </button>
+                        </ConfirmButton>
                       </form>
                     </div>
-                  </td>
-                </tr>
+                  </AdminTd>
+                </AdminTr>
               );
-            })}
-          </tbody>
-        </table>
-        {products.length === 0 && (
-          <p className="px-4 py-8 text-center text-zinc-500">No products found.</p>
-        )}
-      </div>
+            })
+          )}
+        </AdminTbody>
+      </AdminTable>
     </div>
   );
 }

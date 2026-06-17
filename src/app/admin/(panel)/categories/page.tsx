@@ -1,6 +1,17 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { deleteCategory } from "@/app/admin/actions";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { ConfirmButton } from "@/components/admin/ConfirmButton";
+import {
+  AdminTable,
+  AdminThead,
+  AdminTh,
+  AdminTbody,
+  AdminTr,
+  AdminTd,
+  AdminTableEmpty,
+} from "@/components/admin/AdminTable";
 
 export default async function AdminCategoriesPage() {
   const categories = await prisma.category.findMany({
@@ -10,34 +21,38 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">Categories</h1>
-        <Link
-          href="/admin/categories/new"
-          className="rounded-lg bg-brand-gold px-4 py-2 text-sm font-semibold text-brand-navy hover:bg-brand-gold-light"
-        >
-          Add category
-        </Link>
-      </div>
+      <AdminPageHeader
+        title="Categories"
+        action={
+          <Link href="/admin/categories/new" className="btn-primary">
+            Add category
+          </Link>
+        }
+      />
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-zinc-200 bg-white">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-zinc-100 bg-zinc-50 text-zinc-600">
-            <tr>
-              <th className="px-4 py-3 font-medium">Name</th>
-              <th className="px-4 py-3 font-medium">Slug</th>
-              <th className="px-4 py-3 font-medium">Products</th>
-              <th className="px-4 py-3 font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((cat) => (
-              <tr key={cat.id} className="border-b border-zinc-50">
-                <td className="px-4 py-3 font-medium">{cat.name}</td>
-                <td className="px-4 py-3 text-zinc-500">{cat.slug}</td>
-                <td className="px-4 py-3">{cat._count.products}</td>
-                <td className="px-4 py-3">
-                  <div className="flex gap-3">
+      <AdminTable>
+        <AdminThead>
+          <AdminTh>Name</AdminTh>
+          <AdminTh>Slug</AdminTh>
+          <AdminTh>Products</AdminTh>
+          <AdminTh>Actions</AdminTh>
+        </AdminThead>
+        <AdminTbody>
+          {categories.length === 0 ? (
+            <AdminTableEmpty colSpan={4}>
+              <p className="text-sm text-muted">No categories yet.</p>
+              <Link href="/admin/categories/new" className="btn-primary mt-4 inline-flex">
+                Add category
+              </Link>
+            </AdminTableEmpty>
+          ) : (
+            categories.map((cat) => (
+              <AdminTr key={cat.id}>
+                <AdminTd className="font-medium text-neutral-900">{cat.name}</AdminTd>
+                <AdminTd className="text-muted">{cat.slug}</AdminTd>
+                <AdminTd className="tabular-nums">{cat._count.products}</AdminTd>
+                <AdminTd>
+                  <div className="flex items-center gap-3">
                     <Link
                       href={`/admin/categories/${cat.id}`}
                       className="text-brand-gold hover:underline"
@@ -47,21 +62,18 @@ export default async function AdminCategoriesPage() {
                     {cat._count.products === 0 && (
                       <form action={deleteCategory}>
                         <input type="hidden" name="id" value={cat.id} />
-                        <button
-                          type="submit"
-                          className="text-red-600 hover:underline"
-                        >
+                        <ConfirmButton message="Delete this category? This cannot be undone.">
                           Delete
-                        </button>
+                        </ConfirmButton>
                       </form>
                     )}
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                </AdminTd>
+              </AdminTr>
+            ))
+          )}
+        </AdminTbody>
+      </AdminTable>
     </div>
   );
 }

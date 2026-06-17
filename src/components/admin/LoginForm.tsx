@@ -10,30 +10,34 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="from" value={redirectTo} />
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Email</label>
+        <label className="block text-sm font-medium text-neutral-700">Email</label>
         <input
           name="email"
           type="email"
           required
           autoComplete="username"
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="input mt-1 w-full"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Password</label>
+        <label className="block text-sm font-medium text-neutral-700">Password</label>
         <input
           name="password"
           type="password"
           required
           autoComplete="current-password"
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="input mt-1 w-full"
         />
       </div>
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state?.error && (
+        <p className="rounded-btn bg-danger-soft px-3 py-2 text-sm text-danger">
+          {state.error}
+        </p>
+      )}
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-xl bg-brand-gold py-3 font-semibold text-brand-navy hover:bg-brand-gold-light disabled:opacity-50"
+        className="btn-primary w-full disabled:opacity-50"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>

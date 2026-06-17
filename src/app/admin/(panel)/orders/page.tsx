@@ -3,6 +3,16 @@ import { prisma } from "@/lib/prisma";
 import { formatPKR } from "@/lib/format";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { AdminSearch } from "@/components/admin/AdminSearch";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import {
+  AdminTable,
+  AdminThead,
+  AdminTh,
+  AdminTbody,
+  AdminTr,
+  AdminTd,
+  AdminTableEmpty,
+} from "@/components/admin/AdminTable";
 
 type Props = { searchParams: Promise<{ status?: string; q?: string }> };
 
@@ -38,7 +48,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-zinc-900">Orders</h1>
+      <AdminPageHeader title="Orders" />
 
       <div className="mt-4">
         <AdminSearch
@@ -53,14 +63,16 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
           if (s !== "all") params.set("status", s);
           if (q) params.set("q", q);
           const href = params.toString() ? `/admin/orders?${params}` : "/admin/orders";
+          const isActive = (s === "all" && !status) || status === s;
           return (
             <Link
               key={s}
               href={href}
+              aria-current={isActive ? "page" : undefined}
               className={`rounded-full px-3 py-1 text-xs font-medium ${
-                (s === "all" && !status) || status === s
+                isActive
                   ? "bg-brand-navy text-white"
-                  : "bg-zinc-200 text-zinc-700 hover:bg-zinc-300"
+                  : "bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
               }`}
             >
               {s === "all" ? "All" : s.replace(/_/g, " ")}
@@ -69,45 +81,44 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
         })}
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-zinc-200 bg-white">
-        <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-zinc-100 bg-zinc-50 text-zinc-600">
-            <tr>
-              <th className="px-4 py-3 font-medium">Order</th>
-              <th className="px-4 py-3 font-medium">Date</th>
-              <th className="px-4 py-3 font-medium">Customer</th>
-              <th className="px-4 py-3 font-medium">Phone</th>
-              <th className="px-4 py-3 font-medium">Total</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id} className="border-b border-zinc-50 hover:bg-zinc-50">
-                <td className="px-4 py-3">
-                  <Link
-                    href={`/admin/orders/${order.id}`}
-                    className="font-medium text-brand-navy hover:underline"
-                  >
-                    {order.orderNumber}
-                  </Link>
-                </td>
-                <td className="px-4 py-3 text-zinc-600">
-                  {order.createdAt.toLocaleDateString("en-PK")}
-                </td>
-                <td className="px-4 py-3">{order.guestName}</td>
-                <td className="px-4 py-3">{order.phone}</td>
-                <td className="px-4 py-3">{formatPKR(order.total)}</td>
-                <td className="px-4 py-3">
-                  <StatusBadge status={order.status} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {orders.length === 0 && (
-          <p className="px-4 py-8 text-center text-zinc-500">No orders found.</p>
-        )}
+      <div className="mt-6">
+        <AdminTable minWidth="min-w-[720px]">
+          <AdminThead>
+            <AdminTh>Order</AdminTh>
+            <AdminTh>Date</AdminTh>
+            <AdminTh>Customer</AdminTh>
+            <AdminTh>Phone</AdminTh>
+            <AdminTh align="right">Total</AdminTh>
+            <AdminTh>Status</AdminTh>
+          </AdminThead>
+          <AdminTbody>
+            {orders.length === 0 ? (
+              <AdminTableEmpty colSpan={6}>No orders found.</AdminTableEmpty>
+            ) : (
+              orders.map((order) => (
+                <AdminTr key={order.id}>
+                  <AdminTd>
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="font-medium text-brand-navy hover:underline"
+                    >
+                      {order.orderNumber}
+                    </Link>
+                  </AdminTd>
+                  <AdminTd className="text-muted">
+                    {order.createdAt.toLocaleDateString("en-PK")}
+                  </AdminTd>
+                  <AdminTd>{order.guestName}</AdminTd>
+                  <AdminTd>{order.phone}</AdminTd>
+                  <AdminTd numeric>{formatPKR(order.total)}</AdminTd>
+                  <AdminTd>
+                    <StatusBadge status={order.status} />
+                  </AdminTd>
+                </AdminTr>
+              ))
+            )}
+          </AdminTbody>
+        </AdminTable>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { ProductForm } from "@/components/admin/ProductForm";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -20,12 +20,12 @@ export default async function EditProductPage({ params }: Props) {
 
   return (
     <div>
-      <Link href="/admin/products" className="text-sm text-brand-gold hover:underline">
-        ← Products
-      </Link>
-      <h1 className="mt-4 text-2xl font-bold text-zinc-900">Edit product</h1>
-      <div className="mt-8">
-        <ProductForm
+      <AdminPageHeader
+        title="Edit product"
+        backHref="/admin/products"
+        backLabel="Products"
+      />
+      <ProductForm
           categories={categories}
           product={{
             id: product.id,
@@ -44,7 +44,6 @@ export default async function EditProductPage({ params }: Props) {
             })),
           }}
         />
-      </div>
     </div>
   );
 }

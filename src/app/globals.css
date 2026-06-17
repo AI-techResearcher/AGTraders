@@ -155,6 +155,23 @@
   .input {
     @apply w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-neutral-900 shadow-sm transition placeholder:text-neutral-400 focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/30;
   }
+
+  /* Admin-density variants */
+  .input-sm {
+    @apply w-full rounded-lg border border-border bg-surface px-2.5 py-1.5 text-sm text-neutral-900 transition placeholder:text-neutral-400 focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/30;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn bg-brand-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-btn px-3 py-1.5 text-sm font-medium text-danger transition-colors hover:bg-danger-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-2;
+  }
+
+  .card-panel {
+    @apply rounded-card border border-border bg-surface shadow-card;
+  }
 }
 
 /* Home-page import/export ticker (seamless right-to-left marquee) */

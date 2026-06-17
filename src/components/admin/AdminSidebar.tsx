@@ -31,16 +31,19 @@ export function AdminSidebar() {
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="rounded-lg border border-brand-navy-light px-3 py-1.5 text-sm text-zinc-200"
+          aria-expanded={open}
+          aria-controls="admin-sidebar-nav"
+          className="rounded-lg border border-brand-navy-light px-3 py-1.5 text-sm text-neutral-200"
         >
           {open ? "Close" : "Menu"}
         </button>
       </div>
 
       <aside
+        id="admin-sidebar-nav"
         className={`${
           open ? "block" : "hidden"
-        } w-full shrink-0 border-r border-brand-navy-light bg-brand-navy text-zinc-300 lg:block lg:w-56`}
+        } w-full shrink-0 border-r border-brand-navy-light bg-brand-navy text-neutral-300 lg:block lg:w-56`}
       >
         <div className="hidden border-b border-brand-navy-light px-4 py-5 lg:block">
           <Link href="/admin">
@@ -56,7 +59,7 @@ export function AdminSidebar() {
             </p>
           </Link>
         </div>
-        <nav className="space-y-1 px-3 py-4">
+        <nav aria-label="Admin navigation" className="space-y-1 px-3 py-4">
           {links.map((link) => {
             const active =
               link.exact ? pathname === link.href : pathname.startsWith(link.href);
@@ -65,10 +68,11 @@ export function AdminSidebar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
+                aria-current={active ? "page" : undefined}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium ${
                   active
-                    ? "bg-brand-navy-light text-brand-gold"
-                    : "hover:bg-brand-navy-light hover:text-brand-gold"
+                    ? "border-l-2 border-brand-gold bg-brand-navy-light text-brand-gold"
+                    : "border-l-2 border-transparent hover:bg-brand-navy-light hover:text-brand-gold"
                 }`}
               >
                 {link.label}
