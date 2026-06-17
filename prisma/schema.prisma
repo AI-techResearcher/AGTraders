@@ -8,10 +8,13 @@ datasource db {
 }
 
 model Category {
-  id       String    @id @default(cuid())
-  name     String
-  slug     String    @unique
-  products Product[]
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  sortOrder   Int       @default(0)
+  products    Product[]
 
   @@index([slug])
 }
@@ -23,6 +26,8 @@ model Product {
   description String
   images      String
   featured    Boolean          @default(false)
+  minOrderQty Int              @default(1)
+  unit        String?
   categoryId  String
   category    Category         @relation(fields: [categoryId], references: [id])
   variants    ProductVariant[]
@@ -96,4 +101,41 @@ model PaymentSettings {
   accountNumber   String
   iban            String
   updatedAt       DateTime @updatedAt
+}
+
+model Service {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  tagline     String?
+  description String
+  image       String?
+  fields      String
+  sortOrder   Int              @default(0)
+  active      Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  inquiries   ServiceInquiry[]
+
+  @@index([slug])
+  @@index([active])
+}
+
+model ServiceInquiry {
+  id        String   @id @default(cuid())
+  refNumber String   @unique
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
+  name      String
+  company   String?
+  country   String
+  email     String
+  phone     String
+  message   String?
+  details   String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+
+  @@index([serviceId])
+  @@index([status])
+  @@index([createdAt])
 }

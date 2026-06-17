@@ -22,8 +22,11 @@ export default async function CheckoutPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-3xl font-bold text-zinc-900">Checkout</h1>
-      <p className="mt-2 text-zinc-600">Guest checkout — no account required.</p>
+      <p className="eyebrow">Almost there</p>
+      <h1 className="mt-1 text-3xl font-bold tracking-tight text-brand-navy sm:text-4xl">
+        Checkout
+      </h1>
+      <p className="mt-2 text-muted">Guest checkout — no account required.</p>
       <div className="mt-8">
         <CheckoutForm subtotal={subtotal} shipping={SHIPPING_FLAT} total={total} />
       </div>

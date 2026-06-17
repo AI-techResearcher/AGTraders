@@ -54,58 +54,35 @@ export function CheckoutForm({ subtotal, shipping, total }: Props) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Full name *</label>
-        <input
-          name="guestName"
-          required
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-        />
+        <label className="block text-sm font-medium text-neutral-700">Full name *</label>
+        <input name="guestName" required className="input mt-1" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Phone *</label>
+        <label className="block text-sm font-medium text-neutral-700">Phone *</label>
         <input
           name="phone"
           type="tel"
           required
           placeholder="03XX-XXXXXXX"
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="input mt-1"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Email *</label>
-        <input
-          name="email"
-          type="email"
-          required
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-        />
+        <label className="block text-sm font-medium text-neutral-700">Email *</label>
+        <input name="email" type="email" required className="input mt-1" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Street address *</label>
-        <textarea
-          name="address"
-          required
-          rows={2}
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-        />
+        <label className="block text-sm font-medium text-neutral-700">Street address *</label>
+        <textarea name="address" required rows={2} className="input mt-1" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-zinc-700">City *</label>
-          <input
-            name="city"
-            required
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-          />
+          <label className="block text-sm font-medium text-neutral-700">City *</label>
+          <input name="city" required className="input mt-1" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-700">Province *</label>
-          <select
-            name="province"
-            required
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-            defaultValue=""
-          >
+          <label className="block text-sm font-medium text-neutral-700">Province *</label>
+          <select name="province" required className="input mt-1" defaultValue="">
             <option value="" disabled>
               Select province
             </option>
@@ -126,16 +103,11 @@ export function CheckoutForm({ subtotal, shipping, total }: Props) {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-zinc-700">Postal code</label>
-        <input
-          name="postalCode"
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
-        />
+        <label className="block text-sm font-medium text-neutral-700">Postal code</label>
+        <input name="postalCode" className="input mt-1" />
       </div>
       <fieldset>
-        <legend className="block text-sm font-medium text-zinc-700">
-          How will you pay? *
-        </legend>
+        <legend className="block text-sm font-medium text-neutral-700">How will you pay? *</legend>
         <div className="mt-2 space-y-2">
           {[
             { value: "jazzcash", label: "JazzCash" },
@@ -144,7 +116,7 @@ export function CheckoutForm({ subtotal, shipping, total }: Props) {
           ].map((opt) => (
             <label
               key={opt.value}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-zinc-200 px-3 py-2 hover:border-brand-gold"
+              className="flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 transition-colors hover:border-brand-gold focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30"
             >
               <input
                 type="radio"
@@ -152,50 +124,47 @@ export function CheckoutForm({ subtotal, shipping, total }: Props) {
                 value={opt.value}
                 required
                 defaultChecked={opt.value === "jazzcash"}
+                className="accent-brand-gold focus-visible:outline-none"
               />
-              <span className="text-sm">{opt.label}</span>
+              <span className="text-sm text-neutral-800">{opt.label}</span>
             </label>
           ))}
         </div>
       </fieldset>
       <div>
-        <label className="block text-sm font-medium text-zinc-700">
+        <label className="block text-sm font-medium text-neutral-700">
           Payment note (optional)
         </label>
         <input
           name="paymentNote"
           placeholder="Transaction reference or extra details"
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="input mt-1"
         />
       </div>
 
-      <div className="rounded-lg bg-zinc-50 p-4 text-sm">
+      <div className="rounded-lg border border-border bg-neutral-50 p-4 text-sm">
         <div className="flex justify-between">
-          <span>Subtotal</span>
-          <span>{formatPKR(subtotal)}</span>
+          <span className="text-muted">Subtotal</span>
+          <span className="font-medium text-neutral-900">{formatPKR(subtotal)}</span>
         </div>
         <div className="mt-1 flex justify-between">
-          <span>Shipping</span>
-          <span>{formatPKR(shipping)}</span>
+          <span className="text-muted">Shipping</span>
+          <span className="font-medium text-neutral-900">{formatPKR(shipping)}</span>
         </div>
-        <div className="mt-2 flex justify-between border-t border-zinc-200 pt-2 font-bold">
+        <div className="mt-2 flex justify-between border-t border-border pt-2 font-bold text-brand-navy">
           <span>Total</span>
           <span>{formatPKR(total)}</span>
         </div>
       </div>
 
-      <p className="text-xs text-zinc-500">
-        After placing your order, you will receive payment details for JazzCash, EasyPaisa,
-        or bank transfer.
+      <p className="text-xs text-muted">
+        After placing your order, you will receive payment details for JazzCash, EasyPaisa, or
+        bank transfer.
       </p>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-xl bg-brand-gold py-3 font-semibold text-brand-navy hover:bg-brand-gold-light disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">
         {loading ? "Placing order…" : "Place order"}
       </button>
     </form>

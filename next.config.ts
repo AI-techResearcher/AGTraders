@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   compress: true,
+  // Allow phone/other devices on your LAN to load dev assets (e.g. http://192.168.x.x:3000)
+  allowedDevOrigins: ["192.168.233.169", "localhost"],
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

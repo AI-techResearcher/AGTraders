@@ -1,19 +1,169 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * ------------------------------------------------------------------ *
+ * Naming vocabulary (use these instead of ad-hoc values):
+ *   Brand .......... brand-navy / brand-navy-light / brand-gold / brand-gold-light (legacy, still valid)
+ *   Navy scale ..... navy-500 … navy-950   (navy-900 == brand-navy)
+ *   Gold scale ..... gold-300 … gold-700   (gold-500 == brand-gold)
+ *   Neutrals ....... neutral-50 … neutral-950  (WARM ramp — use INSTEAD of zinc-*)
+ *   Semantic ....... surface / border / muted / success(-soft) / danger(-soft) / warning
+ *   Radius ......... rounded-btn / rounded-card
+ *   Shadow ......... shadow-card / shadow-card-hover
+ *   Type ........... text-display (fluid hero size)
+ *   Fonts .......... font-sans (Inter, body) / font-display (Sora, headings)
+ *
+ * Spacing rhythm: sections use .section-py (py-16 / sm:py-20 / lg:py-24).
+ *                 cards pad p-5 (sm:p-6); grids gap-6.
+ * Component classes: .btn-primary .btn-outline .card .section .section-py .eyebrow .input
+ * ------------------------------------------------------------------ */
+
 @theme {
+  /* Fonts (wired to next/font variables set on <html>) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand (legacy tokens kept so existing classes keep working) */
   --color-brand-navy: #101d32;
   --color-brand-navy-light: #1a2d4a;
   --color-brand-gold: #c4a163;
   --color-brand-gold-light: #d4b57a;
+
+  /* Navy scale */
+  --color-navy-950: #0b1524;
+  --color-navy-900: #101d32;
+  --color-navy-800: #16263f;
+  --color-navy-700: #1a2d4a;
+  --color-navy-600: #243a5c;
+  --color-navy-500: #324b72;
+
+  /* Gold scale */
+  --color-gold-300: #e3d0a4;
+  --color-gold-400: #d4b57a;
+  --color-gold-500: #c4a163;
+  --color-gold-600: #a9863f;
+  --color-gold-700: #876a2f;
+
+  /* Warm neutral ramp (use these instead of cold zinc-*) */
+  --color-neutral-50: #f8f9fb;
+  --color-neutral-100: #eef0f4;
+  --color-neutral-200: #e2e5ea;
+  --color-neutral-300: #cdd2da;
+  --color-neutral-400: #9aa2af;
+  --color-neutral-500: #6b7480;
+  --color-neutral-600: #4d5560;
+  --color-neutral-700: #39414b;
+  --color-neutral-800: #262b33;
+  --color-neutral-900: #161b21;
+  --color-neutral-950: #0c0f13;
+
+  /* Semantic */
+  --color-surface: #ffffff;
+  --color-border: #e2e5ea;
+  --color-muted: #6b7480;
+  --color-success: #1f9d57;
+  --color-success-soft: #e6f4ec;
+  --color-danger: #d33c3c;
+  --color-danger-soft: #fbe9e9;
+  --color-warning: #d9931f;
+  --color-warning-soft: #fbf1dd;
+
+  /* Radius */
+  --radius-btn: 0.625rem;
+  --radius-card: 0.875rem;
+
+  /* Shadows (navy-tinted, layered) */
+  --shadow-card: 0 1px 2px rgba(16, 29, 50, 0.06), 0 4px 16px rgba(16, 29, 50, 0.06);
+  --shadow-card-hover: 0 10px 30px rgba(16, 29, 50, 0.12);
+  --shadow-header: 0 1px 0 0 rgba(26, 45, 74, 1), 0 10px 24px -14px rgba(0, 0, 0, 0.55);
+
+  /* Fluid display size for hero headings */
+  --text-display: clamp(2.5rem, 5vw, 3.5rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
 }
 
 :root {
   --background: #f8f9fb;
-  --foreground: #171717;
+  --foreground: #161b21;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+/* ------------------------------------------------------------------ *
+ * Base layer
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  /* Branded keyboard-focus ring for links/buttons (form controls keep their own) */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  [role="button"]:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--color-brand-gold);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-brand-gold) 30%, transparent);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Reusable component classes
+ * ------------------------------------------------------------------ */
+@layer components {
+  .section {
+    @apply mx-auto max-w-6xl px-4;
+  }
+
+  .section-py {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-brand-gold;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn bg-brand-gold px-5 py-2.5 text-sm font-semibold text-brand-navy transition-colors hover:bg-brand-gold-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-btn border border-brand-gold/60 px-5 py-2.5 text-sm font-semibold text-brand-gold transition-colors hover:border-brand-gold hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2;
+  }
+
+  .card {
+    @apply rounded-card border border-border bg-surface shadow-card transition hover:shadow-card-hover;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 text-sm text-neutral-900 shadow-sm transition placeholder:text-neutral-400 focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/30;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

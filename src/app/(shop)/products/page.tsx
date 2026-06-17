@@ -36,28 +36,53 @@ export default async function ProductsPage({
   ]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
-      <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
+      <p className="eyebrow">Catalog</p>
+      <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-navy sm:text-4xl">
         {filters.q ? `Results for “${filters.q}”` : "Shop"}
       </h1>
+      <p className="mt-2 max-w-2xl text-neutral-600">
+        Browse our full range of wholesale products, filtered to match your
+        sourcing needs.
+      </p>
 
-      <div className="mt-6 flex flex-col gap-8 lg:flex-row">
+      <div className="mt-8 flex flex-col gap-8 lg:flex-row">
         <ProductFilters categories={categories} filters={filters} />
 
         <div className="min-w-0 flex-1">
-          <p className="mb-4 text-sm text-zinc-600">
+          <p className="mb-4 text-sm text-neutral-600">
             {sorted.length} product{sorted.length !== 1 ? "s" : ""}
           </p>
 
           {sorted.length === 0 ? (
-            <div className="rounded-xl border border-zinc-200 bg-white p-8 text-center">
-              <p className="text-zinc-600">No products match your filters.</p>
-              <Link href="/products" className="mt-2 inline-block text-sm font-medium text-brand-gold hover:underline">
+            <div className="flex flex-col items-center rounded-card border border-border bg-surface py-16 px-6 text-center shadow-card">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-12 w-12 text-neutral-300"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+                <path d="M8 11h6" />
+              </svg>
+              <h2 className="mt-4 font-display text-xl font-bold text-brand-navy">
+                No products found
+              </h2>
+              <p className="mt-2 max-w-sm text-sm text-neutral-600">
+                We couldn&apos;t find anything matching your filters. Try
+                broadening your search or clearing the filters.
+              </p>
+              <Link href="/products" className="btn-primary mt-6">
                 Clear filters
               </Link>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 2xl:grid-cols-4">
               {sorted.map((product) => (
                 <ProductCard
                   key={product.id}
